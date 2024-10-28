@@ -16,7 +16,7 @@ spec:
                 service:
                   name: scpi-invest-partner
                   port:
-                    number: 8081
+                    number: 8080
   tls:
     - hosts:
         - {{ if .Values.ingressPrefix }}{{ .Values.ingressPrefix }}.{{ end }}scpi-invest-partner.check-consulting.net

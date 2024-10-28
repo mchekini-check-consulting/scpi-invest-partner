@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://admin:admin@192.168.1.103:27017/mongo_db_app?authSource=admin

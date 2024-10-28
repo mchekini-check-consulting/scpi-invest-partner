@@ -23,5 +23,5 @@ spec:
             - containerPort: 27017
           envFrom:
             - secretRef:
-                name: db-credentials #TODO NEED CREDS ON KUB
+                name: mongo-credentials
       restartPolicy: Always

@@ -1,0 +1,7 @@
+image:
+  tag: latest
+  repo: mchekini
+  name: scpi-invest-partner
+
+application:
+  environment: int

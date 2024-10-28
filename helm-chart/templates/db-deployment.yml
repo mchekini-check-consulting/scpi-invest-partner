@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scpi-invest-partner-db
+  labels:
+    app: scpi-invest-partner-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scpi-invest-partner-db
+  template:
+    metadata:
+      name: scpi-invest-partner-db
+      labels:
+        app: scpi-invest-partner-db
+    spec:
+      containers:
+        - name: scpi-invest-partner-db
+          image: mongo
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          envFrom:
+            - secretRef:
+                name: db-credentials #TODO NEED CREDS ON KUB
+      restartPolicy: Always

@@ -1,0 +1,10 @@
+services:
+  scpi-invest-partner-db:
+    image: mongo:latest
+    container_name: scpi-invest-partner-db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: scpi-invest-partner-db
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin

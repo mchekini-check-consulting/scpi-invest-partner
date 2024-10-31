@@ -1,10 +1,14 @@
 package net.checkconsulting.scpiinvestpartner.service;
 
 import net.checkconsulting.scpiinvestpartner.dto.InvestmentRequestDto;
+import net.checkconsulting.scpiinvestpartner.dto.InvestmentStatusDto;
 import net.checkconsulting.scpiinvestpartner.entity.Investment;
 import net.checkconsulting.scpiinvestpartner.repository.InvestmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class InvestmentService {
@@ -27,5 +31,23 @@ public class InvestmentService {
         investment.setStatus("PENDING");
         investment.setDecisionDate(null);
         return investmentRepository.save(investment);
+    }
+
+    public HttpStatus updateInvestmentStatus(InvestmentStatusDto investmentStatusDto) {
+
+        HttpStatus httpStatus;
+        Optional<Investment> investment = investmentRepository.findInvestmentByInvestmentLabel(investmentStatusDto.getInvestmentLabel());
+
+        if(investment.isPresent())
+        {
+            investment.get().setStatus(investmentStatusDto.getInvestmentStatus());
+            investmentRepository.save(investment.get());
+            httpStatus = HttpStatus.OK;
+        }
+        else {
+            httpStatus = HttpStatus.NOT_FOUND;
+        }
+
+        return httpStatus;
     }
 }

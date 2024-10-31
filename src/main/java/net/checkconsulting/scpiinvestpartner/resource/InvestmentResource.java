@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import net.checkconsulting.scpiinvestpartner.dto.InvestmentRequestDto;
+import net.checkconsulting.scpiinvestpartner.dto.InvestmentStatusDto;
 import net.checkconsulting.scpiinvestpartner.service.InvestmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,10 +30,22 @@ public class InvestmentResource {
     })
     @PostMapping("/create")
     public ResponseEntity<String> createInvestment(@RequestBody InvestmentRequestDto dto) {
-        investmentService.createInvestment(dto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/investments/" + investmentService.createInvestment(dto).getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Update investment status", description = "Updates the status of an existing investment.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Investment status updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid status data provided"),
+            @ApiResponse(responseCode = "404", description = "Investment not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @PutMapping
+    public ResponseEntity<?> updateInvestmentStatus(@RequestBody InvestmentStatusDto investmentStatusDto) {
+        HttpStatus httpStatus = investmentService.updateInvestmentStatus(investmentStatusDto);
+        return ResponseEntity.status(httpStatus).build();
     }
 
 }

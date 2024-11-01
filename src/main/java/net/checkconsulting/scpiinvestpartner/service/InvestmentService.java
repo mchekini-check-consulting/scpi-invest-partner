@@ -1,26 +1,31 @@
 package net.checkconsulting.scpiinvestpartner.service;
 
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
+import net.checkconsulting.scpiinvestpartner.configuration.kafka.InvestmentMessage;
 import net.checkconsulting.scpiinvestpartner.dto.InvestmentRequestDto;
 import net.checkconsulting.scpiinvestpartner.dto.InvestmentStatusDto;
 import net.checkconsulting.scpiinvestpartner.entity.Investment;
 import net.checkconsulting.scpiinvestpartner.repository.InvestmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
-import static net.checkconsulting.scpiinvestpartner.enums.InvestStatus.PENDING;
+import static net.checkconsulting.scpiinvestpartner.enums.InvestStatus.*;
 
 @Service
+@Slf4j
 public class InvestmentService {
 
     private final InvestmentRepository investmentRepository;
+    private final KafkaTemplate<String, InvestmentMessage> kafkaTemplate;
 
     @Autowired
-    public InvestmentService(InvestmentRepository investmentRepository) {
+    public InvestmentService(InvestmentRepository investmentRepository, KafkaTemplate<String, InvestmentMessage> kafkaTemplate) {
         this.investmentRepository = investmentRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public Investment createInvestment(InvestmentRequestDto dto) {
@@ -36,22 +41,23 @@ public class InvestmentService {
         return investmentRepository.save(investment);
     }
 
-    public HttpStatus updateInvestmentStatus(InvestmentStatusDto investmentStatusDto) {
+    public void updateInvestmentStatus(InvestmentStatusDto investmentStatusDto) {
 
-        HttpStatus httpStatus;
-        Optional<Investment> investment = investmentRepository.findInvestmentByInvestmentLabel(investmentStatusDto.getInvestmentLabel());
 
-        if(investment.isPresent())
-        {
-            investment.get().setStatus(investmentStatusDto.getInvestmentStatus());
-            investment.get().setDecisionDate(LocalDateTime.now());
-            investmentRepository.save(investment.get());
-            httpStatus = HttpStatus.OK;
-        }
-        else {
-            httpStatus = HttpStatus.NOT_FOUND;
-        }
-
-        return httpStatus;
+        investmentRepository.findInvestmentByInvestmentLabel(investmentStatusDto.getInvestmentLabel()).ifPresent(investment -> {
+            if (investmentStatusDto.getInvestmentStatus() == REJECTED) {
+                investment.setStatus(REJECTED);
+            }
+            else if (investmentStatusDto.getInvestmentStatus() == VALIDATED && investment.getStatus() == PAYMENT_RECEIVED) investment.setStatus(VALIDATED);
+            investmentRepository.save(investment);
+            InvestmentMessage investmentMessage = InvestmentMessage.builder()
+                    .label(investment.getInvestmentLabel())
+                    .status(investment.getStatus().toString())
+                    .decisionDate(LocalDateTime.now())
+                    .reason(investmentStatusDto.getReason())
+                    .build();
+            kafkaTemplate.send("investments-status", investmentMessage);
+        });
     }
+
 }

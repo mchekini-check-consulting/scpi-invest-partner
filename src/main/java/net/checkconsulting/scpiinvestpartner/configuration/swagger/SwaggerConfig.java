@@ -1,4 +1,4 @@
-package net.checkconsulting.scpiinvestpartner.configuration;
+package net.checkconsulting.scpiinvestpartner.configuration.swagger;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

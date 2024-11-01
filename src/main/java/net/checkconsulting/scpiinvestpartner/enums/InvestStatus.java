@@ -3,5 +3,6 @@ package net.checkconsulting.scpiinvestpartner.enums;
 public enum InvestStatus {
     VALIDATED,
     REJECTED,
-    PENDING
+    PENDING,
+    PAYMENT_RECEIVED
 }

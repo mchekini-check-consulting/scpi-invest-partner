@@ -14,4 +14,5 @@ public class InvestmentStatusDto {
 
     private String investmentLabel;
     private InvestStatus investmentStatus;
+    private String reason;
 }

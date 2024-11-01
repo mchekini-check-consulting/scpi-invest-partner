@@ -1,6 +1,7 @@
 spring:
+  kafka:
+    bootstrap-servers: kafka.kafka:9094
   data:
     mongodb:
       uri: mongodb://admin:admin@scpi-invest-partner-db:27017/scpi-invest-partner-db?authSource=admin
-
 

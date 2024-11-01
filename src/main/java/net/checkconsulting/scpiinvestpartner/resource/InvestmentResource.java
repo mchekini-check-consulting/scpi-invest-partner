@@ -43,9 +43,9 @@ public class InvestmentResource {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping
-    public ResponseEntity<?> updateInvestmentStatus(@RequestBody InvestmentStatusDto investmentStatusDto) {
-        HttpStatus httpStatus = investmentService.updateInvestmentStatus(investmentStatusDto);
-        return ResponseEntity.status(httpStatus).build();
+    public void updateInvestmentStatus(@RequestBody InvestmentStatusDto investmentStatusDto) {
+         investmentService.updateInvestmentStatus(investmentStatusDto);
+
     }
 
 }

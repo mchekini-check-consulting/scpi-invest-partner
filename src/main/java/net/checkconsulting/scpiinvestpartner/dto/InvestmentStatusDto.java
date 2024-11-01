@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.checkconsulting.scpiinvestpartner.enums.InvestStatus;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class InvestmentStatusDto {
 
     private String investmentLabel;
-    private String investmentStatus;
+    private InvestStatus investmentStatus;
 }

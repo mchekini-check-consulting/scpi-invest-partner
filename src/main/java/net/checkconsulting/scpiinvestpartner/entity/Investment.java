@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.checkconsulting.scpiinvestpartner.enums.InvestStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -21,7 +24,7 @@ public class Investment {
     private double totalAmount;
     private Integer stripping;
     private String investmentLabel;
-    private String status = "PENDING";
+    private InvestStatus status;
     private String partnerName;
-    private Date decisionDate = null;
+    private LocalDateTime decisionDate;
 }

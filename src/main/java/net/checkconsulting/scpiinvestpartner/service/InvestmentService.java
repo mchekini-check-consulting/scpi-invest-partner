@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static net.checkconsulting.scpiinvestpartner.enums.InvestStatus.PENDING;
 
 @Service
 public class InvestmentService {
@@ -28,7 +31,7 @@ public class InvestmentService {
         investment.setStripping(dto.getStripping());
         investment.setInvestmentLabel(dto.getInvestmentLabel());
         investment.setPartnerName(dto.getPartnerName());
-        investment.setStatus("PENDING");
+        investment.setStatus(PENDING);
         investment.setDecisionDate(null);
         return investmentRepository.save(investment);
     }
@@ -41,6 +44,7 @@ public class InvestmentService {
         if(investment.isPresent())
         {
             investment.get().setStatus(investmentStatusDto.getInvestmentStatus());
+            investment.get().setDecisionDate(LocalDateTime.now());
             investmentRepository.save(investment.get());
             httpStatus = HttpStatus.OK;
         }

@@ -7,14 +7,14 @@ spring:
 
 
 
+
 logging:
   level:
     org:
+      apache:
+        kafka: ERROR
       springframework:
         kafka: ERROR
     java:
       net: ERROR
-    org:
-      apache:
-        kafka: ERROR
 

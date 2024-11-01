@@ -5,3 +5,16 @@ spring:
     mongodb:
       uri: mongodb://admin:admin@scpi-invest-partner-db:27017/scpi-invest-partner-db?authSource=admin
 
+
+
+logging:
+  level:
+    org:
+      springframework:
+        kafka: ERROR
+    java:
+      net: ERROR
+    org:
+      apache:
+        kafka: ERROR
+

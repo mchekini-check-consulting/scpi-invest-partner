@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.checkconsulting.scpiinvestpartner.enums.InvestStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -19,10 +22,14 @@ public class PlannedInvestment {
     private String firstName;
     private String lastName;
     private String email;
-    private double montant;
-    private String frequence;
-    private int jourPrelevement;
-    private int nombreDePart;
-    private String typeDePropriete;
+    private double amount;
+    private String frequency;
+    private int debitDayOfMonth;
+    private int numberOfShares;
+    private String propertyType;
+    private String label;
+    private InvestStatus status;
+    private LocalDate decisionDate;
+    private String reason;
 }
 

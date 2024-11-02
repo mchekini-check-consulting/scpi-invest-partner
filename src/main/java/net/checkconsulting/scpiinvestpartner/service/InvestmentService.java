@@ -56,7 +56,7 @@ public class InvestmentService {
                     .decisionDate(LocalDateTime.now())
                     .reason(investmentStatusDto.getReason())
                     .build();
-            kafkaTemplate.send("investments-status", investmentMessage);
+            kafkaTemplate.send("investments-status", "", investmentMessage);
         });
     }
 

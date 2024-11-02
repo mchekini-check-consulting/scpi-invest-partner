@@ -8,6 +8,7 @@ import net.checkconsulting.scpiinvestpartner.dto.InvestmentStatusDto;
 import net.checkconsulting.scpiinvestpartner.entity.Investment;
 import net.checkconsulting.scpiinvestpartner.repository.InvestmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,9 @@ import static net.checkconsulting.scpiinvestpartner.enums.InvestStatus.*;
 @Service
 @Slf4j
 public class InvestmentService {
+
+    @Value("${spring.profiles.active}")
+    public String env;
 
     private final InvestmentRepository investmentRepository;
     private final KafkaTemplate<String, InvestmentMessage> kafkaTemplate;
@@ -56,7 +60,7 @@ public class InvestmentService {
                     .decisionDate(LocalDateTime.now())
                     .reason(investmentStatusDto.getReason())
                     .build();
-            kafkaTemplate.send("investments-status", "", investmentMessage);
+            kafkaTemplate.send("investments-status-" + env, "", investmentMessage);
         });
     }
 

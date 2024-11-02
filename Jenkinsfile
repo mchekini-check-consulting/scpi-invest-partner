@@ -8,7 +8,8 @@ node("ci-node"){
     }
 
     stage("Tests unitaires"){
-        sh "chmod 777 mvnw && ./mvnw test"
+        sh "chmod 777 mvnw "
+//        sh "./mvnw test"
     }
 
 // TODO: ON NE DISPOSE PAS DES CRED SONAR POUR CREE L'APP

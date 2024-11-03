@@ -47,18 +47,17 @@ public class PlannedInvestmentService {
     public void updateInvestmentStatus(InvestmentStatusDto investmentStatus) {
 
         plannedInvestmentRepository.findPlannedInvestmentByLabel(investmentStatus.getInvestmentLabel()).ifPresent(plannedInvestment -> {
-            if (investmentStatus.getInvestmentStatus() == REJECTED) {
-                plannedInvestment.setStatus(REJECTED);
-            } else if (investmentStatus.getInvestmentStatus() == VALIDATED && plannedInvestment.getStatus() == PAYMENT_RECEIVED)
-                plannedInvestment.setStatus(VALIDATED);
-            plannedInvestmentRepository.save(plannedInvestment);
-            InvestmentMessage investmentMessage = InvestmentMessage.builder()
-                    .label(plannedInvestment.getLabel())
-                    .status(plannedInvestment.getStatus().toString())
-                    .decisionDate(LocalDateTime.now())
-                    .reason(investmentStatus.getReason())
-                    .build();
-            kafkaTemplate.send("planned-investments-status-" + env, "", investmentMessage);
+            if (investmentStatus.getInvestmentStatus() == VALIDATED || investmentStatus.getInvestmentStatus() == REJECTED){
+                plannedInvestment.setStatus(investmentStatus.getInvestmentStatus());
+                plannedInvestmentRepository.save(plannedInvestment);
+                InvestmentMessage investmentMessage = InvestmentMessage.builder()
+                        .label(plannedInvestment.getLabel())
+                        .status(plannedInvestment.getStatus().toString())
+                        .decisionDate(LocalDateTime.now())
+                        .reason(investmentStatus.getReason())
+                        .build();
+                kafkaTemplate.send("planned-investments-status-" + env, "", investmentMessage);
+            }
         });
     }
 }
